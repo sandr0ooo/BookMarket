@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Заказы</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">BookMarket</a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+        <ul class="navbar-nav me-auto" th:if="${user != null}">
+            <li class="nav-item dropdown">
+                <a th:text="${user.getUsername()}" class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false"></a>
+
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a th:if="${user.getRole() == 'ROLE_ADMIN'}" class="dropdown-item" href="/admin">Кабинет администратора</a>
+                    <a class="dropdown-item" href="/logout">Выход</a>
+                </div>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/cart">Корзина</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/orders">Заказы</a>
+            </li>
+
+        </ul>
+        <ul class="navbar-nav me-auto" th:unless="${user != null}">
+            <li class="nav-item active">
+                <a class="nav-link" href="/authentication">Войти</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/register">Зарегистрироваться</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container p-3">
+    <div class="row">
+        <h3 class="col-12 text-center">Заказы</h3>
+</div>
+
+    <div class="row">
+        <div th:each="order : ${orders}" class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+                <a th:href="@{/product/{id}(id=${order.getProduct().getId()})}">
+                    <img class="card-img-top" th:src="'/img/' + ${order.getProduct().getImages()[0].getPath()}" alt="Product Image">
+                </a>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a th:href="@{/product/{id}(id=${order.getProduct().getId()})}" th:text="${order.getProduct().getTitle()}"></a>
+                    </h4>
+                    <p class="card-text" th:text="${order.getProduct().getDescription()}"></p>
+                    <h5 th:text="${order.getProduct().getPrice()} + ' РУБ'"></h5>
+                    <p th:text="'Cтатус: ' + ${order.getStatus()}">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</div>
+</body>
+</html>
